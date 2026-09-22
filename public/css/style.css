@@ -1,0 +1,864 @@
+/* Reset & Estilos Básicos */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  user-select: none;
+}
+
+body {
+  background-color: #0f1115;
+  background-image: radial-gradient(circle at 50% 20%, #1a1e27 0%, #0d0f14 100%);
+  color: #e2e8f0;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  padding: 15px;
+}
+
+/* Header */
+.app-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #171b22;
+  border: 1px solid #2a313d;
+  border-radius: 12px;
+  padding: 12px 24px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.icon{
+  width: 50px;
+}
+
+.brand .icon {
+  font-size: 28px;
+}
+
+.brand h1 {
+  font-size: 20px;
+  font-weight: 900;
+  letter-spacing: 1.5px;
+  color: #f8fafc;
+  text-transform: uppercase;
+}
+
+.header-actions {
+  display: flex;
+  gap: 10px;
+}
+
+/* Placar Main Container */
+.scoreboard-container {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+}
+
+/* Moldura do Placar Eletrônico Estilo Arena/LED */
+.scoreboard-frame {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(145deg, #1b1f28, #11141b);
+  border: 8px solid #2a2f3a;
+  border-radius: 24px;
+  padding: 24px;
+  box-shadow: 
+    0 20px 50px rgba(0,0,0,0.8),
+    inset 0 0 15px rgba(255,255,255,0.05),
+    0 0 2px 2px rgba(255,255,255,0.1);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  position: relative;
+}
+
+/* Fontes Digitais LED */
+.digital-display {
+  font-family: 'Orbitron', monospace;
+  background-color: #050608;
+  border-radius: 8px;
+  border: 2px solid #1a1e27;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  line-height: 1;
+  letter-spacing: 2px;
+  box-shadow: inset 0 0 15px rgba(0,0,0,0.9);
+}
+
+.box-label {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+  color: #94a3b8;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+  text-align: center;
+}
+
+/* Linha Superior: Cronômetros Ajustados e Centralizados */
+.top-row {
+  display: flex;
+  justify-content: center;
+  align-items: stretch;
+  gap: 24px;
+  width: 100%;
+}
+
+.clock-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.main-clock-box {
+  flex: 3;
+}
+
+.shot-clock-box {
+  flex: 1.2;
+  max-width: 220px;
+}
+
+.main-clock {
+  font-size: 100px;
+  font-weight: 900;
+  color: #ff3333;
+  text-shadow: 0 0 15px rgba(255, 51, 51, 0.7), 0 0 30px rgba(255, 51, 51, 0.3);
+  padding: 12px 24px;
+  width: 100%;
+  cursor: pointer;
+  transition: border-color 0.2s;
+}
+
+.main-clock:hover {
+  border-color: #ff3333;
+}
+
+.clock-status {
+  margin-top: 6px;
+  font-size: 11px;
+  font-weight: 700;
+  color: #fbbf24;
+  letter-spacing: 1px;
+}
+
+.shot-clock {
+  font-size: 100px;
+  font-weight: 900;
+  color: #ffb703;
+  text-shadow: 0 0 15px rgba(255, 183, 3, 0.7), 0 0 25px rgba(255, 183, 3, 0.3);
+  padding: 10px;
+  width: 100%;
+}
+
+.shot-mode-tag {
+  margin-top: 6px;
+  font-size: 10px;
+  font-weight: 800;
+  color: #38bdf8;
+  background: #0f172a;
+  padding: 2px 8px;
+  border-radius: 4px;
+  border: 1px solid #1e293b;
+}
+
+/* Linha Principal (Times + Painel Central) */
+.main-row {
+  display: grid;
+  grid-template-columns: 1fr 180px 1fr;
+  gap: 24px;
+  align-items: start;
+}
+
+/* Painéis de Times */
+.team-panel {
+  background: #151921;
+  border: 2px solid #23293b;
+  border-radius: 16px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  align-items: center;
+}
+
+.team-name-input {
+  background: #0b0d12;
+  border: 1px solid #334155;
+  border-radius: 8px;
+  color: #f8fafc;
+  font-family: 'Inter', sans-serif;
+  font-size: 22px;
+  font-weight: 900;
+  text-align: center;
+  padding: 8px 12px;
+  width: 100%;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  transition: border-color 0.2s;
+}
+
+.team-name-input:focus {
+  outline: none;
+  border-color: #38bdf8;
+  background: #111520;
+}
+
+.score-display-wrapper {
+  width: 100%;
+}
+
+.score-display {
+  font-size: 330px;
+  font-weight: 900;
+  height: 350px;
+  color: #ff2a2a;
+  text-shadow: 0 0 20px rgba(255, 42, 42, 0.8), 0 0 40px rgba(255, 42, 42, 0.4);
+}
+
+.team-2 .score-display {
+  color: #ffbe0b;
+  text-shadow: 0 0 20px rgba(255, 190, 11, 0.8), 0 0 40px rgba(255, 190, 11, 0.4);
+}
+
+/* Botões de Ação */
+.action-buttons {
+  display: flex;
+  gap: 8px;
+  width: 100%;
+  justify-content: center;
+}
+
+.btn {
+  font-family: 'Inter', sans-serif;
+  font-weight: 700;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.15s ease-in-out;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 6px;
+}
+
+.btn:active {
+  transform: scale(0.96);
+}
+
+.btn-score {
+  flex: 1;
+  padding: 5px 2px;
+  font-size: 15px;
+  background: #1e293b;
+  color: #f8fafc;
+  border: 1px solid #334155;
+}
+
+.btn-score:hover {
+  background: #334155;
+  border-color: #475569;
+}
+
+.btn-sub {
+  background: #3f1919 !important;
+  color: #fca5a5 !important;
+  border-color: #7f1d1d !important;
+}
+
+.btn-sub:hover {
+  background: #7f1d1d !important;
+}
+
+/* Faltas */
+.fouls-container {
+  display: flex;
+  gap: 12px;
+  width: 100%;
+  align-items: center;
+  background: #0f1218;
+  padding: 12px;
+  border-radius: 12px;
+  border: 1px solid #1e2430;
+}
+
+.foul-box {
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+}
+
+.foul-box-controls{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  position: relative;
+  gap: 7px;
+}
+
+.foul-display {
+  font-size: 38px;
+  width: 60px;
+  height: 52px;
+  color: #22c55e;
+  text-shadow: 0 0 12px rgba(34, 197, 94, 0.8);
+}
+
+.bonus-badge {
+  display: none;
+  position: absolute;
+  top: -20px;
+  background: #ef4444;
+  color: #fff;
+  font-size: 9px;
+  font-weight: 900;
+  padding: 2px 5px;
+  border-radius: 4px;
+  animation: blink-bonus 1s infinite alternate;
+}
+
+@keyframes blink-bonus {
+  from { opacity: 0.6; }
+  to { opacity: 1; }
+}
+
+.bonus-badge.active {
+  display: block;
+}
+
+.foul-buttons {
+  flex-direction: column;
+  gap: 6px;
+}
+
+.btn-foul {
+  padding: 6px 12px;
+  font-size: 12px;
+  background: #1e293b;
+  color: #e2e8f0;
+  border: 1px solid #334155;
+}
+
+/* Painel Central (Período & Controles) */
+.center-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  align-items: center;
+  width: 100%;
+}
+
+.period-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+.period-display {
+  font-size: 54px;
+  width: 100px;
+  height: 70px;
+  color: #22c55e;
+  text-shadow: 0 0 15px rgba(34, 197, 94, 0.8);
+}
+
+.period-controls {
+  display: flex;
+  gap: 6px;
+  margin-top: 8px;
+  width: 100%;
+}
+
+.btn-period-next {
+  flex: 1;
+  padding: 8px;
+  font-size: 11px;
+  background: #166534;
+  color: #dcfce7;
+  border: 1px solid #22c55e;
+}
+
+.btn-period-next:hover {
+  background: #15803d;
+}
+
+.btn-icon {
+  padding: 6px 10px;
+  background: #1e293b;
+  color: #94a3b8;
+  border: 1px solid #334155;
+}
+
+/* Grupo do Relógio Principal */
+.clock-control-group {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.btn-primary {
+  background: #2563eb;
+  color: #ffffff;
+  padding: 12px;
+  font-size: 15px;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.4);
+}
+
+.btn-primary:hover {
+  background: #1d4ed8;
+}
+
+.btn-play.running {
+  background: #dc2626 !important;
+  box-shadow: 0 4px 12px rgba(220, 38, 38, 0.4) !important;
+}
+
+.clock-quick-actions {
+  display: flex;
+  gap: 6px;
+}
+
+.btn-sm {
+  flex: 1;
+  padding: 6px;
+  font-size: 11px;
+}
+
+.btn-secondary {
+  background: #1e293b;
+  color: #cbd5e1;
+  border: 1px solid #334155;
+}
+
+.btn-secondary:hover {
+  background: #334155;
+  color: #fff;
+}
+
+.btn-danger {
+  background: #b91c1c;
+  color: #fff;
+}
+
+.btn-danger:hover {
+  background: #dc2626;
+}
+
+.btn-success {
+  background: #15803d;
+  color: #fff;
+}
+
+.btn-success:hover {
+  background: #166534;
+}
+
+/* Shot Clock Controls */
+.shot-clock-control-group {
+  width: 100%;
+  background: #11141b;
+  border: 1px solid #1e2430;
+  border-radius: 12px;
+  padding: 10px;
+  text-align: center;
+}
+
+.control-group-title {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  color: #64748b;
+  display: block;
+  margin-bottom: 8px;
+}
+
+.shot-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.btn-shot {
+  padding: 8px;
+  font-size: 12px;
+}
+
+.btn-24 {
+  background: #d97706;
+  color: #fff;
+}
+
+.btn-24:hover {
+  background: #b45309;
+}
+
+.btn-14 {
+  background: #0284c7;
+  color: #fff;
+}
+
+.btn-14:hover {
+  background: #0369a1;
+}
+
+/* Sound Toggle */
+.sound-toggle-wrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  background: #0b0d12;
+  padding: 6px 10px;
+  border-radius: 8px;
+  font-size: 11px;
+  color: #94a3b8;
+}
+
+.sound-toggle-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+}
+
+.btn-xs {
+  padding: 4px 8px;
+  font-size: 10px;
+}
+
+.btn-outline {
+  background: transparent;
+  border: 1px solid #334155;
+  color: #94a3b8;
+}
+
+.btn-outline:hover {
+  border-color: #64748b;
+  color: #fff;
+}
+
+/* Footer Rápido */
+.scoreboard-footer {
+  margin-top: 10px;
+  background: #0b0d12;
+  border-radius: 10px;
+  padding: 8px 16px;
+  border: 1px solid #1e2430;
+}
+
+.quick-keyboard-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  font-size: 11px;
+  color: #64748b;
+  align-items: center;
+  justify-content: center;
+}
+
+.bar-title {
+  color: #38bdf8;
+  font-weight: 800;
+}
+
+/* MODAIS */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(4px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease-in-out;
+}
+
+.modal-overlay.active {
+  opacity: 1;
+  pointer-events: all;
+}
+
+.modal-card {
+  background: #171b22;
+  border: 1px solid #2a313d;
+  border-radius: 16px;
+  width: 90%;
+  max-width: 480px;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.8);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  animation: modal-slide 0.25s ease-out;
+}
+
+.modal-card.modal-lg {
+  max-width: 720px;
+}
+
+@keyframes modal-slide {
+  from { transform: translateY(-20px) scale(0.96); }
+  to { transform: translateY(0) scale(1); }
+}
+
+.modal-header {
+  padding: 16px 20px;
+  background: #11141b;
+  border-bottom: 1px solid #232936;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.modal-header h3 {
+  font-size: 16px;
+  font-weight: 800;
+  color: #f8fafc;
+}
+
+.btn-close-modal {
+  background: none;
+  border: none;
+  font-size: 24px;
+  color: #64748b;
+  cursor: pointer;
+}
+
+.btn-close-modal:hover {
+  color: #fff;
+}
+
+.modal-body {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  max-height: 75vh;
+  overflow-y: auto;
+}
+
+.modal-footer {
+  padding: 14px 20px;
+  background: #11141b;
+  border-top: 1px solid #232936;
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+/* Modal Edição Tempo */
+.time-input-group {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  margin: 10px 0;
+}
+
+.time-input-group label {
+  display: block;
+  font-size: 11px;
+  font-weight: 700;
+  color: #94a3b8;
+  margin-bottom: 4px;
+}
+
+.time-input-group input {
+  background: #050608;
+  border: 2px solid #2563eb;
+  border-radius: 8px;
+  color: #ff3333;
+  font-family: 'Orbitron', monospace;
+  font-size: 32px;
+  width: 90px;
+  text-align: center;
+  padding: 6px;
+}
+
+.colon-sep {
+  font-size: 32px;
+  font-weight: 900;
+  color: #ff3333;
+  margin-top: 16px;
+}
+
+.preset-buttons {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+/* Modal Atalhos Grid */
+.shortcuts-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
+}
+
+.shortcut-group h4 {
+  font-size: 13px;
+  color: #38bdf8;
+  margin-bottom: 8px;
+  border-bottom: 1px solid #232936;
+  padding-bottom: 4px;
+}
+
+.shortcut-group ul {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.shortcut-group li {
+  font-size: 12px;
+  color: #cbd5e1;
+}
+
+kbd {
+  background: #232936;
+  border: 1px solid #334155;
+  border-radius: 4px;
+  padding: 2px 6px;
+  font-size: 11px;
+  font-weight: 700;
+  color: #f8fafc;
+  box-shadow: 0 2px 0 #0f1218;
+}
+
+.note-box {
+  background: #1e2430;
+  border-left: 4px solid #38bdf8;
+  padding: 10px;
+  border-radius: 4px;
+  font-size: 11px;
+  color: #94a3b8;
+}
+
+/* Modal Resumo Partida */
+.match-summary-card {
+  background: #11141b;
+  border: 1px solid #232936;
+  border-radius: 12px;
+  padding: 16px;
+}
+
+.summary-score-line {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  margin: 12px 0;
+  font-size: 18px;
+}
+
+.summary-score-line strong {
+  font-family: 'Orbitron', monospace;
+  font-size: 28px;
+  color: #ff3333;
+}
+
+.vs {
+  color: #64748b;
+  font-size: 14px;
+  font-weight: 900;
+}
+
+.summary-details p {
+  font-size: 12px;
+  color: #94a3b8;
+  margin-bottom: 4px;
+}
+
+.highlight-winner {
+  color: #22c55e;
+  font-weight: 800;
+}
+
+.form-group textarea {
+  width: 100%;
+  height: 70px;
+  background: #0b0d12;
+  border: 1px solid #232936;
+  border-radius: 8px;
+  color: #fff;
+  padding: 8px;
+  font-family: inherit;
+  font-size: 12px;
+  resize: vertical;
+}
+
+/* Modal Histórico Tabela */
+.history-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+}
+
+.history-table th, .history-table td {
+  padding: 10px;
+  text-align: left;
+  border-bottom: 1px solid #232936;
+}
+
+.history-table th {
+  background: #11141b;
+  color: #94a3b8;
+  font-weight: 700;
+}
+
+.history-table td strong {
+  font-family: 'Orbitron', monospace;
+  color: #f59e0b;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 30px;
+  color: #64748b;
+  font-size: 13px;
+}
+
+.loading-spinner {
+  text-align: center;
+  padding: 20px;
+  color: #38bdf8;
+}
+
+/* Responsividade */
+@media (max-width: 900px) {
+  .top-row {
+    flex-direction: column;
+    gap: 16px;
+  }
+  .shot-clock-box {
+    max-width: 100%;
+    width: 100%;
+  }
+  .main-row {
+    grid-template-columns: 1fr;
+  }
+}

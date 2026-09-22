@@ -1,0 +1,22 @@
+{
+  "name": "placar-basquete",
+  "version": "1.0.0",
+  "description": "Placar de Basquete com suporte a atalhos de teclado, cronômetros de 24s/14s e salvamento em JSON",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js"
+  },
+  "keywords": [
+    "basquete",
+    "scoreboard",
+    "placar",
+    "nodejs",
+    "express"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.19.2"
+  }
+}

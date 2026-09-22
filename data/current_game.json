@@ -1,0 +1,17 @@
+{
+  "team1": {
+    "name": "TIME 1",
+    "score": 0,
+    "fouls": 0
+  },
+  "team2": {
+    "name": "TIME 2",
+    "score": 0,
+    "fouls": 0
+  },
+  "period": 1,
+  "gameTime": 600,
+  "shotClock": 24,
+  "is14sOverride": false,
+  "isRunning": false
+}

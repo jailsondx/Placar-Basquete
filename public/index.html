@@ -1,0 +1,427 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Placar Eletrônico de Basquete - São Benedito</title>
+    <!-- Google Fonts: Orbitron para estilo LED digital e Inter para UI -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&family=Orbitron:wght@400;700;900&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body>
+    <!-- Barra Superior de Ações -->
+    <header class="app-header">
+      <div class="brand">
+        <img src="/img/logo_sb.png" class="icon" />
+        <h1>LIGA LBSS 2026 - SÃO BENEDITO</h1>
+      </div>
+      <div class="header-actions">
+        <button id="btn-shortcuts" class="btn btn-secondary" title="Ver Atalhos de Teclado">
+          ⌨️ Atalhos (Teclado)
+        </button>
+        <button id="btn-history" class="btn btn-secondary" title="Ver Histórico em JSON">
+          📂 Histórico Salvamentos
+        </button>
+        <button id="btn-finish-game" class="btn btn-danger" title="Finalizar Partida e Salvar em JSON">
+          💾 Finalizar & Salvar Jogo (F8)
+        </button>
+      </div>
+    </header>
+
+    <!-- Container Principal do Placar Estilo LED -->
+    <main class="scoreboard-container">
+      <div class="scoreboard-frame">
+        <!-- Linha Superior: Relógio Principal e Shot Clock -->
+        <div class="top-row">
+          <!-- Logo -->
+
+          <!-- Tempo Principal do Quarto -->
+          <div class="clock-box main-clock-box">
+            <span class="box-label">TEMPO DO QUARTO</span>
+            <div
+              class="digital-display main-clock"
+              id="main-clock-display"
+              title="Clique para editar manualmente ou pressione ESPAÇO para Iniciar/Pausar"
+            >
+              10:00
+            </div>
+            <div class="clock-status" id="clock-status-tag">PAUSADO (Espaço)</div>
+          </div>
+
+          <!-- Cronômetro de Posse (Shot Clock 24s/14s) -->
+          <div class="clock-box shot-clock-box">
+            <span class="box-label">TEMPO DE POSSE</span>
+            <div class="digital-display shot-clock" id="shot-clock-display" title="24s / 14s Shot Clock">24</div>
+            <div class="shot-mode-tag" id="shot-mode-tag">PADRÃO 24s</div>
+          </div>
+        </div>
+
+        <!-- Linha Principal: Time 1 | Centro (Período & Controles) | Time 2 -->
+        <div class="main-row">
+          <!-- PAINEL TIME 1 -->
+          <section class="team-panel team-1">
+            <!-- Nome do Time Editável -->
+            <div class="team-name-wrapper">
+              <input
+                type="text"
+                id="team1-name"
+                class="team-name-input"
+                value="TIME 1"
+                placeholder="NOME TIME 1"
+                maxlength="15"
+                autocomplete="off"
+              />
+            </div>
+
+            <!-- Placar Time 1 -->
+            <div class="score-display-wrapper">
+              <div class="digital-display score-display" id="team1-score-display">00</div>
+            </div>
+
+            <!-- Botões Visuais de Pontos Time 1 -->
+            <div class="action-buttons score-buttons">
+              <button class="btn btn-score" data-team="1" data-points="1" title="Adicionar 1 Ponto (Tecla A)">
+                +1
+              </button>
+              <button class="btn btn-score" data-team="1" data-points="2" title="Adicionar 2 Pontos (Tecla S)">
+                +2
+              </button>
+              <button class="btn btn-score" data-team="1" data-points="3" title="Adicionar 3 Pontos (Tecla D)">
+                +3
+              </button>
+              <button class="btn btn-score btn-sub" data-team="1" data-points="-1" title="Remover 1 Ponto (Tecla Z)">
+                -1
+              </button>
+            </div>
+
+            <!-- Faltas do Time 1 -->
+            <div class="fouls-container">
+              <div class="foul-box">
+                <span class="box-label">FALTAS</span>
+                <div class="foul-box-controls">
+                  <button class="btn btn-foul btn-sub" data-team="1" data-foul="-1" title="Remover Falta (Tecla V)">
+                    Falta -
+                  </button>
+                  <div class="digital-display foul-display" id="team1-fouls-display">0</div>
+                  <button class="btn btn-foul" data-team="1" data-foul="1" title="Adicionar Falta (Tecla F)">
+                    Falta +
+                  </button>
+                </div>
+                <span class="bonus-badge" id="team1-bonus-badge">BÔNUS</span>
+              </div>
+              <!--
+             <div class="action-buttons foul-buttons">
+              <button class="btn btn-foul" data-team="1" data-foul="1" title="Adicionar Falta (Tecla F)">Falta +</button>
+              <button class="btn btn-foul btn-sub" data-team="1" data-foul="-1" title="Remover Falta (Tecla V)">Falta -</button>
+            </div>
+            -->
+          </div>
+          </section>
+
+          <!-- PAINEL CENTRAL (PERÍODO & CONTROLES DE TEMPO) -->
+          <section class="center-panel">
+            <!-- Período / Quarto -->
+            <div class="period-box">
+              <span class="box-label">PERÍODO / QUARTO</span>
+              <div class="digital-display period-display" id="period-display">1</div>
+              <div class="period-controls">
+                <button class="btn btn-icon" id="btn-period-prev" title="Período Anterior">◀</button>
+                <button class="btn btn-period-next" id="btn-period-next" title="Próximo Período (Tecla P)">
+                  PRÓXIMO (P)
+                </button>
+                <button class="btn btn-icon" id="btn-period-inc" title="Próximo Período">▶</button>
+              </div>
+            </div>
+
+            <!-- Botões Visuais do Cronômetro Principal -->
+            <div class="clock-control-group">
+              <button id="btn-play-pause" class="btn btn-primary btn-play">▶ INICIAR (Espaço)</button>
+              <div class="clock-quick-actions">
+                <button id="btn-edit-time" class="btn btn-secondary btn-sm" title="Digitar tempo manualmente">
+                  ✏️ Editar Tempo
+                </button>
+                <button id="btn-reset-time" class="btn btn-secondary btn-sm" title="Reiniciar tempo para 10:00">
+                  ↺ Reset 10:00
+                </button>
+              </div>
+            </div>
+
+            <!-- Botões Visuais do Shot Clock -->
+            <div class="shot-clock-control-group">
+              <span class="control-group-title">CONTROLE POSSE</span>
+              <div class="shot-buttons">
+                <button id="btn-shot-24" class="btn btn-shot btn-24" title="Resetar para 24 Segundos (Tecla R)">
+                  ↺ POSSE 24s (R)
+                </button>
+                <button
+                  id="btn-shot-14"
+                  class="btn btn-shot btn-14"
+                  title="Iniciar Posse de 14 Segundos uma vez (Tecla T)"
+                >
+                  ⚡ POSSE 14s (T)
+                </button>
+              </div>
+            </div>
+
+            <!-- Alerta Sonoro Toggle -->
+            <div class="sound-toggle-wrapper">
+              <label class="sound-toggle-label">
+                <input type="checkbox" id="sound-enabled" checked />
+                <span class="custom-checkbox"></span>
+                🔊 Efeitos Sonoros / Sirene
+              </label>
+              <button id="btn-test-buzzer" class="btn btn-xs btn-outline">Testar Sirene</button>
+            </div>
+          </section>
+
+          <!-- PAINEL TIME 2 -->
+          <section class="team-panel team-2">
+            <!-- Nome do Time Editável -->
+            <div class="team-name-wrapper">
+              <input
+                type="text"
+                id="team2-name"
+                class="team-name-input"
+                value="TIME 2"
+                placeholder="NOME TIME 2"
+                maxlength="15"
+                autocomplete="off"
+              />
+            </div>
+
+            <!-- Placar Time 2 -->
+            <div class="score-display-wrapper">
+              <div class="digital-display score-display" id="team2-score-display">00</div>
+            </div>
+
+            <!-- Botões Visuais de Pontos Time 2 -->
+            <div class="action-buttons score-buttons">
+              <button class="btn btn-score" data-team="2" data-points="1" title="Adicionar 1 Ponto (Tecla J)">
+                +1
+              </button>
+              <button class="btn btn-score" data-team="2" data-points="2" title="Adicionar 2 Pontos (Tecla K)">
+                +2
+              </button>
+              <button class="btn btn-score" data-team="2" data-points="3" title="Adicionar 3 Pontos (Tecla L)">
+                +3
+              </button>
+              <button class="btn btn-score btn-sub" data-team="2" data-points="-1" title="Remover 1 Ponto (Tecla M)">
+                -1
+              </button>
+            </div>
+
+            <!-- Faltas do Time 2 -->
+            <div class="fouls-container">
+              <div class="foul-box">
+                <span class="box-label">FALTAS</span>
+                <div class="foul-box-controls">
+                  <button class="btn btn-foul btn-sub" data-team="2" data-foul="-1" title="Remover Falta (Tecla V)">
+                    Falta -
+                  </button>
+                  <div class="digital-display foul-display" id="team2-fouls-display">0</div>
+                  <button class="btn btn-foul" data-team="2" data-foul="1" title="Adicionar Falta (Tecla F)">
+                    Falta +
+                  </button>
+                </div>
+                <span class="bonus-badge" id="team2-bonus-badge">BÔNUS</span>
+              </div>
+              <!--
+             <div class="action-buttons foul-buttons">
+              <button class="btn btn-foul" data-team="1" data-foul="1" title="Adicionar Falta (Tecla F)">Falta +</button>
+              <button class="btn btn-foul btn-sub" data-team="1" data-foul="-1" title="Remover Falta (Tecla V)">Falta -</button>
+            </div>
+            -->
+          </div>
+          </section>
+        </div>
+        <!-- /main-row -->
+
+        <!-- Rodapé do Placar: Guia Rápido de Teclado -->
+        <footer class="scoreboard-footer">
+          <div class="quick-keyboard-bar">
+            <span class="bar-title">⚡ ATALHOS RÁPIDOS:</span>
+            <span><strong>Espaço</strong>: Play/Pausa</span> | <span><strong>R</strong>: Reset 24s</span> |
+            <span><strong>T / Shift+R</strong>: 14s Shot Clock</span> |
+            <span><strong>A / S / D</strong>: T1 (+1, +2, +3)</span> | <span><strong>Z</strong>: T1 (-1)</span> |
+            <span><strong>J / K / L</strong>: T2 (+1, +2, +3)</span> | <span><strong>M</strong>: T2 (-1)</span> |
+            <span><strong>F / V</strong>: Falta T1</span> | <span><strong>H / N</strong>: Falta T2</span> |
+            <span><strong>P</strong>: Próximo Quarto</span>
+          </div>
+        </footer>
+      </div>
+    </main>
+
+    <!-- MODAL 1: EDIÇÃO MANUAL DE TEMPO -->
+    <div class="modal-overlay" id="modal-edit-time">
+      <div class="modal-card">
+        <div class="modal-header">
+          <h3>Editar Tempo do Quarto</h3>
+          <button class="btn-close-modal" data-close="modal-edit-time">&times;</button>
+        </div>
+        <div class="modal-body">
+          <p>Digite os minutos e segundos para ajustar o cronômetro principal:</p>
+          <div class="time-input-group">
+            <div>
+              <label for="input-minutes">Minutos:</label>
+              <input type="number" id="input-minutes" min="0" max="99" value="10" />
+            </div>
+            <span class="colon-sep">:</span>
+            <div>
+              <label for="input-seconds">Segundos:</label>
+              <input type="number" id="input-seconds" min="0" max="59" value="00" />
+            </div>
+          </div>
+          <div class="preset-buttons">
+            <button class="btn btn-xs btn-outline btn-preset" data-min="12" data-sec="0">12:00 (NBA)</button>
+            <button class="btn btn-xs btn-outline btn-preset" data-min="10" data-sec="0">10:00 (FIBA)</button>
+            <button class="btn btn-xs btn-outline btn-preset" data-min="5" data-sec="0">05:00 (Prorrogação)</button>
+            <button class="btn btn-xs btn-outline btn-preset" data-min="2" data-sec="0">02:00 (Final)</button>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary" data-close="modal-edit-time">Cancelar</button>
+          <button class="btn btn-primary" id="btn-save-custom-time">Aplicar Novo Tempo</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODAL 2: GUIA COMPLETO DE ATALHOS DE TECLADO -->
+    <div class="modal-overlay" id="modal-shortcuts">
+      <div class="modal-card modal-lg">
+        <div class="modal-header">
+          <h3>⌨️ Guia Completo de Atalhos de Teclado</h3>
+          <button class="btn-close-modal" data-close="modal-shortcuts">&times;</button>
+        </div>
+        <div class="modal-body">
+          <div class="shortcuts-grid">
+            <div class="shortcut-group">
+              <h4>⏱️ Relógios & Cronômetro</h4>
+              <ul>
+                <li><kbd>Espaço</kbd> : Iniciar / Pausar Cronômetro</li>
+                <li><kbd>R</kbd> : Resetar Shot Clock para 24s</li>
+                <li><kbd>T</kbd> ou <kbd>Shift + R</kbd> : Iniciar Shot Clock em 14s (uma vez)</li>
+                <li><kbd>P</kbd> : Avançar Período / Quarto</li>
+              </ul>
+            </div>
+            <div class="shortcut-group">
+              <h4>🔴 Time 1 (Esquerda)</h4>
+              <ul>
+                <li><kbd>A</kbd> : +1 Ponto</li>
+                <li><kbd>S</kbd> : +2 Pontos</li>
+                <li><kbd>D</kbd> : +3 Pontos</li>
+                <li><kbd>Z</kbd> : -1 Ponto</li>
+                <li><kbd>F</kbd> : +1 Falta</li>
+                <li><kbd>V</kbd> : -1 Falta</li>
+              </ul>
+            </div>
+            <div class="shortcut-group">
+              <h4>🟡 Time 2 (Direita)</h4>
+              <ul>
+                <li><kbd>J</kbd> : +1 Ponto</li>
+                <li><kbd>K</kbd> : +2 Pontos</li>
+                <li><kbd>L</kbd> : +3 Pontos</li>
+                <li><kbd>M</kbd> : -1 Ponto</li>
+                <li><kbd>H</kbd> : +1 Falta</li>
+                <li><kbd>N</kbd> : -1 Falta</li>
+              </ul>
+            </div>
+            <div class="shortcut-group">
+              <h4>💾 Sistema</h4>
+              <ul>
+                <li><kbd>F8</kbd> : Abrir Janela para Finalizar & Salvar em JSON</li>
+                <li><kbd>?</kbd> : Abrir esta janela de atalhos</li>
+              </ul>
+            </div>
+          </div>
+          <div class="note-box">
+            📌 <strong>Nota:</strong> O jogo é salvo automaticamente a cada alteração em
+            <code>data/current_game.json</code>. Ao recarregar a página (F5), o placar restaura exatamente de onde
+            parou!
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-primary" data-close="modal-shortcuts">Entendido</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODAL 3: FINALIZAR E SALVAR JOGO EM JSON -->
+    <div class="modal-overlay" id="modal-finish">
+      <div class="modal-card">
+        <div class="modal-header">
+          <h3>🏁 Finalizar Partida e Salvar em JSON</h3>
+          <button class="btn-close-modal" data-close="modal-finish">&times;</button>
+        </div>
+        <div class="modal-body">
+          <div class="match-summary-card">
+            <h4>Resumo da Partida:</h4>
+            <div class="summary-score-line">
+              <span id="summary-team1-name">TIME 1</span>
+              <strong id="summary-team1-score">00</strong>
+              <span class="vs">X</span>
+              <strong id="summary-team2-score">00</strong>
+              <span id="summary-team2-name">TIME 2</span>
+            </div>
+            <div class="summary-details">
+              <p><strong>Vencedor:</strong> <span id="summary-winner" class="highlight-winner">-</span></p>
+              <p><strong>Faltas:</strong> <span id="summary-fouls-info">Time 1: 0 | Time 2: 0</span></p>
+              <p><strong>Período de Término:</strong> <span id="summary-period">1º Quarto</span></p>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="finish-notes">Observações do Jogo (Opcional):</label>
+            <textarea id="finish-notes" placeholder="Ex: Final do campeonato local, jogo truncado..."></textarea>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary" data-close="modal-finish">Continuar Jogo</button>
+          <button class="btn btn-success" id="btn-confirm-save-json">💾 Salvar Partida no JSON</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODAL 4: HISTÓRICO DE JOGOS SALVOS (JSON) -->
+    <div class="modal-overlay" id="modal-history">
+      <div class="modal-card modal-lg">
+        <div class="modal-header">
+          <h3>📂 Histórico de Jogos Salvos (data/games.json)</h3>
+          <button class="btn-close-modal" data-close="modal-history">&times;</button>
+        </div>
+        <div class="modal-body">
+          <div id="history-loading" class="loading-spinner">Carregando dados...</div>
+          <div id="history-empty" class="empty-state" style="display: none">
+            Nenhuma partida foi salva no arquivo JSON ainda. Finalize uma partida para visualizar aqui.
+          </div>
+          <div id="history-table-container" class="history-table-container" style="display: none">
+            <table class="history-table">
+              <thead>
+                <tr>
+                  <th>Data / Hora</th>
+                  <th>Partida</th>
+                  <th>Placar</th>
+                  <th>Vencedor</th>
+                  <th>Faltas</th>
+                  <th>Ações</th>
+                </tr>
+              </thead>
+              <tbody id="history-tbody">
+                <!-- Preenchido via JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary" id="btn-refresh-history">🔄 Atualizar Lista</button>
+          <button class="btn btn-primary" data-close="modal-history">Fechar</button>
+        </div>
+      </div>
+    </div>
+
+    <script src="js/app.js"></script>
+  </body>
+</html>
