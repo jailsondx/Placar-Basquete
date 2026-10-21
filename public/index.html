@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Placar Eletrônico de Basquete - São Benedito</title>
+    <title>JSPOINT - Placar Eletrônico de Basquete</title>
     <!-- Google Fonts: Orbitron para estilo LED digital e Inter para UI -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -17,17 +17,34 @@
     <!-- Barra Superior de Ações -->
     <header class="app-header">
       <div class="brand">
-        <img src="/img/logo_sb.png" class="icon" />
-        <h1>LIGA LBSS 2026 - SÃO BENEDITO</h1>
+        <img src="/img/icone.png" class="icon" />
+        <span class="brand-title">
+          <h1>JSpoint</h1>
+          <h5>Placar Eletrônico de Basquete</h5>
+          <h6>©Jailson Sousa - 2026</h6>
+        </span>
+         
       </div>
+      <!-- Nome do Campeonato Editável -->
+            <div class="campeonato-name-wrapper">
+              <input
+                type="text"
+                id="campeonato-name"
+                class="campeonato-name-input"
+                value=""
+                placeholder="Campeonato / Torneio"
+                maxlength="50"
+                autocomplete="off"
+              />
+            </div>
       <div class="header-actions">
         <button id="btn-shortcuts" class="btn btn-secondary" title="Ver Atalhos de Teclado">
           ⌨️ Atalhos (Teclado)
         </button>
-        <button id="btn-history" class="btn btn-secondary" title="Ver Histórico em JSON">
+        <button id="btn-history" class="btn btn-secondary" title="Ver Histórico em">
           📂 Histórico Salvamentos
         </button>
-        <button id="btn-finish-game" class="btn btn-danger" title="Finalizar Partida e Salvar em JSON">
+        <button id="btn-finish-game" class="btn btn-danger" title="Finalizar Partida e Salvar">
           💾 Finalizar & Salvar Jogo (F8)
         </button>
       </div>
@@ -331,16 +348,19 @@
               </ul>
             </div>
             <div class="shortcut-group">
-              <h4>💾 Sistema</h4>
+              <h4>💾 Sistema & Visualização</h4>
               <ul>
-                <li><kbd>F8</kbd> : Abrir Janela para Finalizar & Salvar em JSON</li>
+                <li><kbd>Ctrl +</kbd> : Aumentar Escala / Zoom</li>
+                <li><kbd>Ctrl -</kbd> : Diminuir Escala / Zoom</li>
+                <li><kbd>Ctrl 0</kbd> : Restaurar Escala Padrão (100%)</li>
+                <li><kbd>F11</kbd> : Alternar Tela Cheia</li>
+                <li><kbd>F8</kbd> : Abrir Janela para Finalizar & Salvar</li>
                 <li><kbd>?</kbd> : Abrir esta janela de atalhos</li>
               </ul>
             </div>
           </div>
           <div class="note-box">
-            📌 <strong>Nota:</strong> O jogo é salvo automaticamente a cada alteração em
-            <code>data/current_game.json</code>. Ao recarregar a página (F5), o placar restaura exatamente de onde
+            📌 <strong>Nota:</strong> O jogo é salvo automaticamente a cada alteração. Ao recarregar a página (F5), o placar restaura exatamente de onde
             parou!
           </div>
         </div>
@@ -354,7 +374,7 @@
     <div class="modal-overlay" id="modal-finish">
       <div class="modal-card">
         <div class="modal-header">
-          <h3>🏁 Finalizar Partida e Salvar em JSON</h3>
+          <h3>🏁 Finalizar Partida e Salvar</h3>
           <button class="btn-close-modal" data-close="modal-finish">&times;</button>
         </div>
         <div class="modal-body">
@@ -380,7 +400,7 @@
         </div>
         <div class="modal-footer">
           <button class="btn btn-secondary" data-close="modal-finish">Continuar Jogo</button>
-          <button class="btn btn-success" id="btn-confirm-save-json">💾 Salvar Partida no JSON</button>
+          <button class="btn btn-success" id="btn-confirm-save-json">💾 Salvar Partida</button>
         </div>
       </div>
     </div>
@@ -389,13 +409,13 @@
     <div class="modal-overlay" id="modal-history">
       <div class="modal-card modal-lg">
         <div class="modal-header">
-          <h3>📂 Histórico de Jogos Salvos (data/games.json)</h3>
+          <h3>📂 Histórico de Jogos Salvos</h3>
           <button class="btn-close-modal" data-close="modal-history">&times;</button>
         </div>
         <div class="modal-body">
           <div id="history-loading" class="loading-spinner">Carregando dados...</div>
           <div id="history-empty" class="empty-state" style="display: none">
-            Nenhuma partida foi salva no arquivo JSON ainda. Finalize uma partida para visualizar aqui.
+            Nenhuma partida foi salva ainda. Finalize uma partida para visualizar aqui.
           </div>
           <div id="history-table-container" class="history-table-container" style="display: none">
             <table class="history-table">
@@ -405,7 +425,6 @@
                   <th>Partida</th>
                   <th>Placar</th>
                   <th>Vencedor</th>
-                  <th>Faltas</th>
                   <th>Ações</th>
                 </tr>
               </thead>
