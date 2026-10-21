@@ -1,22 +1,64 @@
 {
-  "name": "placar-basquete",
+  "name": "JSPOINT-placar-basquete",
   "version": "1.0.0",
   "description": "Placar de Basquete com suporte a atalhos de teclado, cronômetros de 24s/14s e salvamento em JSON",
-  "main": "server.js",
+  "main": "main.js",
   "scripts": {
     "start": "node server.js",
-    "dev": "node --watch server.js"
+    "dev": "node --watch server.js",
+    "electron": "electron .",
+    "electron:dev": "electron .",
+    "dist": "electron-builder --win",
+    "dist:portable": "electron-builder --win portable",
+    "dist:nsis": "electron-builder --win nsis"
   },
   "keywords": [
     "basquete",
     "scoreboard",
     "placar",
     "nodejs",
-    "express"
+    "express",
+    "electron"
   ],
-  "author": "",
+  "author": "Jailson Sousa",
   "license": "ISC",
   "dependencies": {
     "express": "^4.19.2"
+  },
+  "devDependencies": {
+    "electron": "^44.9.2",
+    "electron-builder": "^26.15.3"
+  },
+  "build": {
+    "appId": "com.jspointplacarbasquete.app",
+    "productName": "JSPOINT - Placar de Basquete",
+    "npmRebuild": false,
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "main.js",
+      "server.js",
+      "public/**/*",
+      "package.json"
+    ],
+    "asar": true,
+    "win": {
+      "target": [
+        "nsis",
+        "portable"
+      ],
+      "icon": "public/img/icone.png"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "JSPOINT - Placar de Basquete"
+    },
+    "portable": {
+      "artifactName": "${productName}-Portable-${version}.${ext}"
+    }
   }
 }

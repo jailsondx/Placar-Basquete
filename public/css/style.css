@@ -22,6 +22,7 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 12px;
   background: #171b22;
   border: 1px solid #2a313d;
   border-radius: 12px;
@@ -32,7 +33,40 @@ body {
 .brand {
   display: flex;
   align-items: center;
+  width: 25%;
   gap: 12px;
+}
+
+.brand-title {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.campeonato-name-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+.campeonato-name-input {
+  /*background: #0b0d12;*/
+  background-color: #171B22;
+  border: none;
+  border-radius: 8px;
+  color: #f8fafc;
+  font-family: 'Inter', sans-serif;
+  font-size: 22px;
+  font-weight: 900;
+  text-align: center;
+  padding: 8px 12px;
+  width: 100%;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  height: 100%;
+  width: 100%;
 }
 
 .icon{
@@ -53,6 +87,8 @@ body {
 
 .header-actions {
   display: flex;
+  justify-content: center;
+  width: 50%;
   gap: 10px;
 }
 

@@ -8,6 +8,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // --- ESTADO DO JOGO ---
   let state = {
+    campeonato: '',
     team1: { name: 'TIME 1', score: 0, fouls: 0 },
     team2: { name: 'TIME 2', score: 0, fouls: 0 },
     period: 1,
@@ -21,6 +22,7 @@ document.addEventListener('DOMContentLoaded', () => {
   };
 
   // --- ELEMENTOS DO DOM ---
+  const elCampeonatoName = document.getElementById('campeonato-name');
   const elMainClock = document.getElementById('main-clock-display');
   const elClockStatus = document.getElementById('clock-status-tag');
   const elShotClock = document.getElementById('shot-clock-display');
@@ -104,6 +106,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function syncCurrentGameState() {
     const statePayload = {
+      campeonato: elCampeonatoName ? elCampeonatoName.value : (state.campeonato || ''),
       team1: { ...state.team1 },
       team2: { ...state.team2 },
       period: state.period,
@@ -150,6 +153,10 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function applyState(savedState) {
+    if (savedState.campeonato !== undefined) {
+      state.campeonato = savedState.campeonato || '';
+      if (elCampeonatoName) elCampeonatoName.value = state.campeonato;
+    }
     if (savedState.team1) {
       state.team1.name = savedState.team1.name || 'TIME 1';
       state.team1.score = savedState.team1.score || 0;
@@ -171,6 +178,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function resetCurrentStateToDefaults() {
+    state.campeonato = '';
     state.team1 = { name: 'TIME 1', score: 0, fouls: 0 };
     state.team2 = { name: 'TIME 2', score: 0, fouls: 0 };
     state.period = 1;
@@ -179,6 +187,7 @@ document.addEventListener('DOMContentLoaded', () => {
     state.is14sOverride = false;
     state.isRunning = false;
 
+    if (elCampeonatoName) elCampeonatoName.value = '';
     elTeam1Name.value = 'TIME 1';
     elTeam2Name.value = 'TIME 2';
 
@@ -351,7 +360,14 @@ document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('btn-period-inc').addEventListener('click', () => changePeriod(1));
   document.getElementById('btn-period-prev').addEventListener('click', () => changePeriod(-1));
 
-  // Nomes dos Times
+  // Nome do Campeonato e Times
+  if (elCampeonatoName) {
+    elCampeonatoName.addEventListener('input', (e) => {
+      state.campeonato = e.target.value;
+      syncCurrentGameState();
+    });
+  }
+
   elTeam1Name.addEventListener('input', (e) => {
     state.team1.name = e.target.value || 'TIME 1';
     syncCurrentGameState();
@@ -475,6 +491,7 @@ document.addEventListener('DOMContentLoaded', () => {
     btnConfirmSaveJson.textContent = 'Salvando no JSON...';
 
     const payload = {
+      campeonato: elCampeonatoName ? elCampeonatoName.value.trim() : (state.campeonato || ''),
       team1: {
         name: elTeam1Name.value || 'TIME 1',
         score: state.team1.score,
@@ -550,13 +567,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
       historyTbody.innerHTML = '';
       data.games.forEach(g => {
+        const campLabel = g.campeonato ? `<span style="font-size: 0.8em; color: #94a3b8; display: block; margin-bottom: 2px;">🏆 ${g.campeonato}</span>` : '';
         const tr = document.createElement('tr');
         tr.innerHTML = `
           <td>${g.formattedDate || g.date}</td>
-          <td>${g.team1.name} x ${g.team2.name}</td>
+          <td>${campLabel}${g.team1.name} x ${g.team2.name}</td>
           <td><strong>${g.team1.score} - ${g.team2.score}</strong></td>
           <td style="color: #22c55e; font-weight: bold;">${g.winner}</td>
-          <td>${g.team1.fouls} / ${g.team2.fouls}</td>
+          <!-- <td>${g.team1.fouls} / ${g.team2.fouls}</td> -->
           <td>
             <button class="btn btn-xs btn-sub btn-delete-game" data-id="${g.id}">Excluir</button>
           </td>

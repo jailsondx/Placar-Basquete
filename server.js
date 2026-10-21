@@ -3,14 +3,24 @@ const fs = require('fs');
 const path = require('path');
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+const DEFAULT_PORT = process.env.PORT || 3000;
 
-const DATA_DIR = path.join(__dirname, 'data');
-const GAMES_FILE = path.join(DATA_DIR, 'games.json');
-const CURRENT_GAME_FILE = path.join(DATA_DIR, 'current_game.json');
+// O diretório de dados é dinâmico (prioriza DATA_DIR definido pelo Electron ou ambiente)
+function getDataDir() {
+  return process.env.DATA_DIR || path.join(__dirname, 'data');
+}
+
+function getGamesFile() {
+  return path.join(getDataDir(), 'games.json');
+}
+
+function getCurrentGameFile() {
+  return path.join(getDataDir(), 'current_game.json');
+}
 
 // Estado padrão de uma nova partida
 const DEFAULT_CURRENT_GAME = {
+  campeonato: '',
   team1: { name: 'TIME 1', score: 0, fouls: 0 },
   team2: { name: 'TIME 2', score: 0, fouls: 0 },
   period: 1,
@@ -21,16 +31,22 @@ const DEFAULT_CURRENT_GAME = {
 };
 
 // Garantir que o diretório data e os arquivos JSON existam
-if (!fs.existsSync(DATA_DIR)) {
-  fs.mkdirSync(DATA_DIR, { recursive: true });
-}
+function ensureStorage() {
+  const dir = getDataDir();
+  const gamesFile = getGamesFile();
+  const currentGameFile = getCurrentGameFile();
 
-if (!fs.existsSync(GAMES_FILE)) {
-  fs.writeFileSync(GAMES_FILE, JSON.stringify([], null, 2), 'utf8');
-}
+  if (!fs.existsSync(dir)) {
+    fs.mkdirSync(dir, { recursive: true });
+  }
 
-if (!fs.existsSync(CURRENT_GAME_FILE)) {
-  fs.writeFileSync(CURRENT_GAME_FILE, JSON.stringify(DEFAULT_CURRENT_GAME, null, 2), 'utf8');
+  if (!fs.existsSync(gamesFile)) {
+    fs.writeFileSync(gamesFile, JSON.stringify([], null, 2), 'utf8');
+  }
+
+  if (!fs.existsSync(currentGameFile)) {
+    fs.writeFileSync(currentGameFile, JSON.stringify(DEFAULT_CURRENT_GAME, null, 2), 'utf8');
+  }
 }
 
 // Middlewares
@@ -40,7 +56,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 // Helpers de Leitura e Escrita
 function getSavedGames() {
   try {
-    const data = fs.readFileSync(GAMES_FILE, 'utf8');
+    ensureStorage();
+    const data = fs.readFileSync(getGamesFile(), 'utf8');
     return JSON.parse(data || '[]');
   } catch (err) {
     console.error('Erro ao ler games.json:', err);
@@ -49,12 +66,14 @@ function getSavedGames() {
 }
 
 function saveGamesList(games) {
-  fs.writeFileSync(GAMES_FILE, JSON.stringify(games, null, 2), 'utf8');
+  ensureStorage();
+  fs.writeFileSync(getGamesFile(), JSON.stringify(games, null, 2), 'utf8');
 }
 
 function getCurrentGame() {
   try {
-    const data = fs.readFileSync(CURRENT_GAME_FILE, 'utf8');
+    ensureStorage();
+    const data = fs.readFileSync(getCurrentGameFile(), 'utf8');
     return JSON.parse(data || JSON.stringify(DEFAULT_CURRENT_GAME));
   } catch (err) {
     console.error('Erro ao ler current_game.json:', err);
@@ -63,7 +82,8 @@ function getCurrentGame() {
 }
 
 function saveCurrentGame(gameState) {
-  fs.writeFileSync(CURRENT_GAME_FILE, JSON.stringify(gameState, null, 2), 'utf8');
+  ensureStorage();
+  fs.writeFileSync(getCurrentGameFile(), JSON.stringify(gameState, null, 2), 'utf8');
 }
 
 // --- ROTAS DO JOGO ATUAL (PERSISTÊNCIA CONTRA RECARREGAMENTO F5) ---
@@ -93,7 +113,7 @@ app.get('/api/games', (req, res) => {
 });
 
 app.post('/api/games', (req, res) => {
-  const { team1, team2, period, duration, notes } = req.body;
+  const { campeonato, team1, team2, period, duration, notes } = req.body;
 
   if (!team1 || !team2 || team1.score === undefined || team2.score === undefined) {
     return res.status(400).json({
@@ -108,6 +128,7 @@ app.post('/api/games', (req, res) => {
     id: 'game_' + Date.now(),
     date: new Date().toISOString(),
     formattedDate: new Date().toLocaleString('pt-BR'),
+    campeonato: campeonato || '',
     team1: {
       name: team1.name || 'Time 1',
       score: Number(team1.score) || 0,
@@ -155,10 +176,27 @@ app.delete('/api/games/:id', (req, res) => {
   res.json({ success: true, message: 'Partida removida do histórico.' });
 });
 
-app.listen(PORT, () => {
-  console.log(`===================================================`);
-  console.log(` 🏀 Placar de Basquete rodando em: http://localhost:${PORT}`);
-  console.log(` 📁 Histórico de jogos em: ${GAMES_FILE}`);
-  console.log(` 💾 Estado em andamento em: ${CURRENT_GAME_FILE}`);
-  console.log(`===================================================`);
-});
+function startServer(port = DEFAULT_PORT) {
+  return new Promise((resolve, reject) => {
+    ensureStorage();
+    const server = app.listen(port, () => {
+      const activePort = server.address().port;
+      console.log(`===================================================`);
+      console.log(` 🏀 Placar de Basquete rodando em: http://localhost:${activePort}`);
+      console.log(` 📁 Histórico de jogos em: ${getGamesFile()}`);
+      console.log(` 💾 Estado em andamento em: ${getCurrentGameFile()}`);
+      console.log(`===================================================`);
+      resolve({ server, port: activePort });
+    });
+    server.on('error', (err) => {
+      reject(err);
+    });
+  });
+}
+
+// Se executado diretamente pelo terminal (node server.js)
+if (require.main === module) {
+  startServer(DEFAULT_PORT);
+}
+
+module.exports = { app, startServer, ensureStorage, getDataDir };
